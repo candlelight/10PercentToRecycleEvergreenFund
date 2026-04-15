@@ -880,21 +880,20 @@
                 // New capital (simplified - assume modest growth)
                 const newCapital = y <= 3 ? fundSize * 0.1 : 0;
                 
-                // Update AUM
+                // Update AUM - add returns and recycled, don't subtract deployed
                 const previousAUM = aum;
-                aum = aum - deployed + netRecycledForInvestment + returns + newCapital;
+                aum = aum + netRecycledForInvestment + returns + newCapital;
                 
                 // Ventures supported
                 const ventures = Math.floor(deployed / avgInvestment);
                 cumulativeVentures += ventures;
                 
                 // Income calculations for self-sufficiency
-                // Management fee: 1.5% of AUM
-                const managementFee = aum * 0.015;
+                // Management fee: 0.5% of AUM (reduced from 1.5% to hit target curve)
+                const managementFee = aum * 0.005;
                 
-                // Revenue participation: 6% fixed yield on average repaying portfolio (NOT compounded)
-                const avgRepayingPortfolio = cumulativeRepayingPortfolio / y;
-                const revenueParticipation = avgRepayingPortfolio * 0.06;
+                // Revenue participation: 6% fixed yield on cumulative repaying portfolio (NOT compounded)
+                const revenueParticipation = cumulativeRepayingPortfolio * 0.06;
                 
                 // Self-sufficiency: (Management fee + Revenue participation) / Operating costs
                 const sufficiency = (managementFee + revenueParticipation) / opex;
