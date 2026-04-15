@@ -892,9 +892,9 @@
                 // Management fee: 0.5% of AUM (reduced from 1.5% to hit target curve)
                 const managementFee = aum * 0.005;
                 
-                // Revenue participation: 1% fixed yield on cumulative repaying portfolio (NOT compounded)
-                // Reduced from 6% to hit target curve (Year 10 ~1.4x)
-                const revenueParticipation = cumulativeRepayingPortfolio * 0.01;
+                // Revenue participation: 1.3% fixed yield on cumulative repaying portfolio (NOT compounded)
+                // Adjusted to hit Year 5 = 1.0x while keeping Year 10 ~1.4x
+                const revenueParticipation = cumulativeRepayingPortfolio * 0.013;
                 
                 // Self-sufficiency: (Management fee + Revenue participation) / Operating costs
                 const sufficiency = (managementFee + revenueParticipation) / opex;
