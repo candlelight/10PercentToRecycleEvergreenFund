@@ -566,8 +566,8 @@
                 
                 <div class="control-card">
                     <label>Recycling Rate</label>
-                    <span class="value" id="recyclingRateValue">70%</span>
-                    <input type="range" id="recyclingRate" min="40" max="90" step="5" value="70">
+                    <span class="value" id="recyclingRateValue">60%</span>
+                    <input type="range" id="recyclingRate" min="40" max="90" step="5" value="60">
                 </div>
                 
                 <div class="control-card">
@@ -811,7 +811,7 @@
             fundSize: 10,
             catalytic: 15,
             defaultRate: 15,
-            recyclingRate: 70,
+            recyclingRate: 60,
             accelerationSubsidy: 10,
             avgInvestment: 250,
             opex: 300
@@ -860,7 +860,7 @@
                 const deployed = Math.min(annualDeploy, aum * 0.3); // Max 30% of AUM
                 cumulativeDeployed += deployed;
                 
-                // Returns (simplified) - only 30% of returns flow back in year 1, ramping up over time
+                // Calculate returns and repayment
                 const returnRate = y === 1 ? 0.03 : (y === 2 ? 0.05 : 0.08);
                 const returns = deployed * returnRate;
                 const defaulted = deployed * defaultRate;
@@ -869,7 +869,7 @@
                 // Track cumulative repaying portfolio for revenue participation
                 cumulativeRepayingPortfolio += repaid;
                 
-                // Recycling - now with acceleration subsidy carved out
+                // Recycling - with acceleration subsidy carved out
                 const recycled = repaid;
                 const accelerationBudget = recycled * accelerationSubsidyPercent;
                 const netRecycledForInvestment = recycled - accelerationBudget;
@@ -880,7 +880,7 @@
                 // New capital (simplified - assume modest growth)
                 const newCapital = y <= 3 ? fundSize * 0.1 : 0;
                 
-                // Update AUM - using net recycled for new investments
+                // Update AUM
                 const previousAUM = aum;
                 aum = aum - deployed + netRecycledForInvestment + returns + newCapital;
                 
@@ -893,7 +893,6 @@
                 const managementFee = aum * 0.015;
                 
                 // Revenue participation: 6% fixed yield on average repaying portfolio (NOT compounded)
-                // Using average cumulative position to avoid compounding effect
                 const avgRepayingPortfolio = cumulativeRepayingPortfolio / y;
                 const revenueParticipation = avgRepayingPortfolio * 0.06;
                 
